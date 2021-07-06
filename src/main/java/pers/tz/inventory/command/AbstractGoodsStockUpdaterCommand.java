@@ -11,7 +11,15 @@ import java.util.List;
 /**
  * @auth tangweize
  * @date 2021/7/6
- * @desc 商品库存更新Command的抽象基类，方法模板模式和命令模式
+ * @desc 商品库存更新Command的抽象基类
+ * Command作为计算库存的逻辑实现类
+ * 以下的三个私有方法，不管是提交订单、支付订单、采购入库等等任何引起库存变化的事件，所执行的逻辑都是一样的
+ * 因此可以作为方法模板抽取出来共用。
+ * 而可销售库存变化、锁定库存变化、已销售库存变化等库存的更新操作，不同的Command实现逻辑不一样
+ * 因此保留为抽象方法，由子类提供具体实现。
+ *
+ * 同时，由于刷表需要用到DO和DAO，而Command面向的是Service层，接收的是DTO
+ * 而不同的Service的DTO是不一样的，因此DTO不抽象到模板方法中，由子类自己定义
  */
 @Slf4j
 public abstract class AbstractGoodsStockUpdaterCommand implements GoodsStockUpdaterCommand {
@@ -49,7 +57,7 @@ public abstract class AbstractGoodsStockUpdaterCommand implements GoodsStockUpda
 
     /**
      * 更新商品的库存状态
-     *
+     * 因此可以抽取出来
      */
     private void updateStockStatus() {
         for (GoodsStockDO goodsStockDO : goodsStockDOs) {
@@ -92,7 +100,7 @@ public abstract class AbstractGoodsStockUpdaterCommand implements GoodsStockUpda
      */
     protected abstract void updateLockedStockQuantity();
 
-    /**
+    /**:
      * 更新商品已销售库存数
      */
     protected abstract void updateSaledStockQuantity();

@@ -13,6 +13,18 @@ import java.util.List;
  * @auth tangweize
  * @date 2021/7/6
  * @desc 库存更新Command类的工厂父类，模板方法模式
+ *
+ * 通过Command的Factory，将Command与外界隔离起来，这里说的外界，其实就是ServiceImpl
+ * 在Service中通过不同的Factory拿到对应的Command，然后去执行
+ * 而在Factory中，不同的Factory同样会有一部分代码是可以共用的，因此也使用方法模板模式抽取出来
+ * 由于Service中的参数是DTO对象，但是不同的Service会对应不同的DTO，因此这里用泛型<T>描述
+ * $AbstractGoodsStockUpdateCommandFactory作为父类工厂，也作为方法模板
+ * 它提供的create(T parameter)方法，并不会提供具体实现，也无法提供具体实现，因为不同的子类工厂应该提供不同的Command逻辑
+ * 所以它在这里的create(T parameter)实现只是定义了create Command的步骤
+ *
+ * 我们知道，更新库存需要DO和DTO来做计算，DO(数据层的库存) +/- DTO(业务层变化的库存) = 新的库存
+ * 因此要把DO以及DTO都提供给Command，又因为这两个领域对象都是随着Service变动的，因此作为参数传递进去
+ * 同时，更新还需要DAO来刷表，因为这个DAO是不会变动的，所以直接通过构造方法传入
  */
 public abstract class AbstractGoodsStockUpdateCommandFactory<T> implements GoodsStockUpdateCommandFactory<T> {
     // 商品库存DAO

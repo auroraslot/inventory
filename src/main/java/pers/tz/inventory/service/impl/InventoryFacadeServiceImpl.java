@@ -34,7 +34,7 @@ public class InventoryFacadeServiceImpl implements InventoryFacadeService {
     @Override
     public Boolean informPurchaseInputFinishedEvent(PurchaseInputOrderDTO purchaseInputOrderDTO) {
         // 采购入库完成，意味着要去更新库存
-        // 而库存有3个：可销售库存，锁定库存，已销售库存，那要更新哪些库存？？
+        // 而库存有3个：可销售库存，锁定库存，已销售库存，那要更新哪些库存？
         // 采购入库：更新可销售库存
         // 退货入库：更新可销售库存，已销售库存
         // 除了这两个事件会引起库存变化，还有取消订单，支付订单，提交订单等
